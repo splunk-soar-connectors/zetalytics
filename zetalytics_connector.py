@@ -23,19 +23,16 @@ class ZetalyticsConnector(BaseConnector):
 
     def __init__(self):
 
-        # Call the BaseConnectors init first
         super(ZetalyticsConnector, self).__init__()
 
         self._state = None
 
     def _handle_test_connectivity(self, param):
 
-        # Add an action result object to self (BaseConnector) to represent the action for this param
         action_result = self.add_action_result(ActionResult(dict(param)))
 
-        url = 'https://zonecruncher.com/' + self._user_hash + '/terabithia/security/'
-        self.save_progress('Connecting to ' + url)
-        self.save_progress('This may take a few minutes')
+        url = self._base_url + '/terabithia/security/'
+        self.save_progress('Connecting to ' + url + '. This may take a few minutes.')
 
         r = requests.get(url)
 
@@ -44,7 +41,6 @@ class ZetalyticsConnector(BaseConnector):
             msg = "Connection error. Response code " + r.status_code
             return action_result.set_status(phantom.APP_ERROR, msg)
 
-        # Return success
         self.save_progress("Test Connectivity Passed")
         return action_result.set_status(phantom.APP_SUCCESS)
 
@@ -77,7 +73,7 @@ class ZetalyticsConnector(BaseConnector):
 
     def getCurrentDNS(self, domain):
 
-        url = 'https://zonecruncher.com/' + self._user_hash + '/terabithia/json-digat?d=' + domain
+        url = self._base_url + '/terabithia/json-digat?d=' + domain
         r = requests.get(url)
 
         if r.status_code == 200:
@@ -90,20 +86,9 @@ class ZetalyticsConnector(BaseConnector):
 
         whois = {}
 
-        url = 'https://zonecruncher.com/' + self._user_hash + '/terabithia/json-d8s?d=' + domain
-        # url = 'https://zonecrcher.com/' + self._user_hash + '/terabithi/json-d8s?d=' + domain
+        url = self._base_url + '/terabithia/json-d8s?d=' + domain
 
-        # try:
         r = requests.get(url)
-        # except requests.exceptions.ConnectionError as e:
-        #    msg = "Connection failed to zonecruncher.com d8s"
-        #    # return self.set_status_save_progress(phantom.APP_ERROR, msg)
-        #    return self.set_status_save_progress(phantom.APP_ERROR, str(e))
-
-        # if not r.status_code == 200:
-        #    msg = "Connection error. Response code " + r.status_code
-        #    # return self.set_status_save_progress(phantom.APP_ERROR, msg)
-        #    return self.set_status(phantom.APP_ERROR, msg)
 
         data = r.json()
 
@@ -151,7 +136,7 @@ class ZetalyticsConnector(BaseConnector):
 
     def getRawWhois(self, domain):
 
-        url = 'https://zonecruncher.com/' + self._user_hash + '/terabithia/json-get-raw-whois?subject=' + domain
+        url = self._base_url + '/terabithia/json-get-raw-whois?subject=' + domain
         r = requests.get(url)
         if r.status_code == 200:
             try:
@@ -166,7 +151,7 @@ class ZetalyticsConnector(BaseConnector):
 
         whois = {}
 
-        url = 'https://zonecruncher.com/' + self._user_hash + '/terabithia/json-d8s-ip?ip=' + ip
+        url = self._base_url + '/terabithia/json-d8s-ip?ip=' + ip
         r = requests.get(url)
 
         if r.status_code == 200:
@@ -205,8 +190,7 @@ class ZetalyticsConnector(BaseConnector):
 
     def getReverseEmailDomain(self, domain):
 
-        url = 'https://zonecruncher.com/' + self._user_hash + '/_search/d8s_email?all_email.domain=' + domain
-        # url = 'https://zonecruncher.com/' + self._user_hash + '/_search/d8s_email?all_email.domain=' + domain + '&size=2'
+        url = self._base_url + '/_search/d8s_email?all_email.domain=' + domain
         r = requests.get(url)
 
         domains = {}
@@ -268,7 +252,7 @@ class ZetalyticsConnector(BaseConnector):
 
     def checkTor(self, ip):
 
-        url = 'https://zonecruncher.com/' + self._user_hash + '/terabithia/json-lookup-tor?ip=' + ip + '&mask=32'
+        url = self._base_url + '/terabithia/json-lookup-tor?ip=' + ip + '&mask=32'
         r = requests.get(url)
 
         response = []
@@ -291,7 +275,7 @@ class ZetalyticsConnector(BaseConnector):
 
     def getMalwareDNSActivity(self, domain):
 
-        url = 'https://zonecruncher.com/' + self._user_hash + '/terabithia/discovery-malware-domain-strings?s=' + domain + '&t=hname'
+        url = self._base_url + '/terabithia/discovery-malware-domain-strings?s=' + domain + '&t=hname'
         r = requests.get(url)
 
         response = []
@@ -310,7 +294,7 @@ class ZetalyticsConnector(BaseConnector):
 
     def getIPMalwareDNSActivity(self, ip):
 
-        url = 'https://zonecruncher.com/' + self._user_hash + '/terabithia/discovery-malware-domain-strings?s=' + ip + '/32&t=ipv4'
+        url = self._base_url + '/terabithia/discovery-malware-domain-strings?s=' + ip + '/32&t=ipv4'
         r = requests.get(url)
 
         response = []
@@ -332,7 +316,7 @@ class ZetalyticsConnector(BaseConnector):
 
     def getReverseDomain(self, domain):
 
-        url = 'https://zonecruncher.com/' + self._user_hash + '/_search/1203-j-passive-ns?q=' + domain
+        url = self._base_url + '/_search/1203-j-passive-ns?q=' + domain
         r = requests.get(url)
 
         if r.status_code == 200:
@@ -341,7 +325,7 @@ class ZetalyticsConnector(BaseConnector):
 
     def getReverseIP(self, ip):
 
-        url = 'https://zonecruncher.com/' + self._user_hash + '/terabithia/j-rdata?mask=32&ip=' + ip
+        url = self._base_url + '/terabithia/j-rdata?mask=32&ip=' + ip
 
         r = requests.get(url)
         if r.status_code == 200:
@@ -357,7 +341,7 @@ class ZetalyticsConnector(BaseConnector):
 
         response = []
 
-        url = 'https://zonecruncher.com/' + self._user_hash + '/terabithia/json-lookup-ptr?ip=' + ip + '&mask=32'
+        url = self._base_url + '/terabithia/json-lookup-ptr?ip=' + ip + '&mask=32'
         r = requests.get(url)
         if r.status_code == 200:
             try:
@@ -376,8 +360,7 @@ class ZetalyticsConnector(BaseConnector):
 
     def getReverseNS(self, ns):
 
-        # url = 'https://zonecruncher.com/' + self._user_hash + '/zonedata/ns2domains?q=' + ns + '&size=4000'
-        url = 'https://zonecruncher.com/' + self._user_hash + '/zonedata/ns2domains?q=' + ns
+        url = self._base_url + '/zonedata/ns2domains?q=' + ns
 
         domains = {}
 
@@ -395,7 +378,7 @@ class ZetalyticsConnector(BaseConnector):
 
     def getNSGlue(self, domain):
 
-        url = 'https://zonecruncher.com/' + self._user_hash + '/terabithia/json-lookup-ns-glue-history?d=' + domain
+        url = self._base_url + '/terabithia/json-lookup-ns-glue-history?d=' + domain
         response = []
         r = requests.get(url)
         if r.status_code == 200:
@@ -431,7 +414,6 @@ class ZetalyticsConnector(BaseConnector):
 
         return action_result.set_status(phantom.APP_SUCCESS)
 
-    # Question - keep Tor?
     def _handle_ip_reputation(self, param):
 
         self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
@@ -464,7 +446,7 @@ class ZetalyticsConnector(BaseConnector):
         action_result = self.add_action_result(ActionResult(dict(param)))
 
         keyword = param['keyword']
-        url = 'https://zonecruncher.com/' + self._user_hash + '/zonedata/search-1k-maps-term?q=' + keyword
+        url = self._base_url + '/zonedata/search-1k-maps-term?q=' + keyword
 
         r = requests.get(url)
 
@@ -487,7 +469,6 @@ class ZetalyticsConnector(BaseConnector):
 
         return action_result.set_status(phantom.APP_SUCCESS)
 
-    # TO DO: Add parameter for result size
     def _handle_reverse_ns(self, param):
 
         self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
@@ -532,7 +513,6 @@ class ZetalyticsConnector(BaseConnector):
 
         return action_result.set_status(phantom.APP_SUCCESS)
 
-    # Do we want to return only a list of domains or additional metadata (owner, create date, first seen, etc)
     def _handle_reverse_email_domain(self, param):
 
         self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
@@ -752,7 +732,7 @@ class ZetalyticsConnector(BaseConnector):
         action_result = self.add_action_result(ActionResult(dict(param)))
 
         email = param['email']
-        url = 'https://zonecruncher.com/' + self._user_hash + '/_search/d8s_email?size=500&email=' + email
+        url = self._base_url + '/_search/d8s_email?size=500&email=' + email
 
         response = {}
         response['email'] = email
@@ -825,7 +805,6 @@ class ZetalyticsConnector(BaseConnector):
 
         ret_val = phantom.APP_SUCCESS
 
-        # Get the action that we are supposed to execute for this App Run
         action_id = self.get_action_identifier()
 
         self.debug_print("action_id", self.get_action_identifier())
@@ -879,19 +858,16 @@ class ZetalyticsConnector(BaseConnector):
 
     def initialize(self):
 
-        # Load the state in initialize, use it to store data
-        # that needs to be accessed across actions
         self._state = self.load_state()
 
-        # get the asset config
         config = self.get_config()
-        self._user_hash = config['ZL_user_hash']
+        user_hash = config['ZL_user_hash']
+        self._base_url = 'https://zonecruncher.com/' + user_hash
 
         return phantom.APP_SUCCESS
 
     def finalize(self):
 
-        # Save the state, this data is saved accross actions and app upgrades
         self.save_state(self._state)
         return phantom.APP_SUCCESS
 
@@ -917,7 +893,6 @@ if __name__ == '__main__':
 
     if (username is not None and password is None):
 
-        # User specified a username but not a password, so ask
         import getpass
         password = getpass.getpass("Password: ")
 
