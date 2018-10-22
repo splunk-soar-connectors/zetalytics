@@ -202,8 +202,8 @@
             "versions": "EQ(*)"
         },
         {
-            "action": "reverse ns",
-            "identifier": "reverse_ns",
+            "action": "reverse nameserver",
+            "identifier": "reverse_nameserver",
             "description": "Get a list of domains and hostnames for an authoritative nameserver",
             "type": "investigate",
             "read_only": true,
