@@ -677,7 +677,7 @@
         },
         {
             "action": "lookup nameserver",
-            "identifier": "lookup_nameserver",
+            "identifier": "lookup_ns",
             "description": "Get information for an authoritative nameserver",
             "type": "investigate",
             "read_only": true,
