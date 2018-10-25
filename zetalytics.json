@@ -460,7 +460,7 @@
         },
         {
             "action": "query d8s",
-            "identifier": "query_d8s",
+            "identifier": "d8s",
             "description": "Query the ZETAlytics D8s service",
             "type": "investigate",
             "read_only": true,
