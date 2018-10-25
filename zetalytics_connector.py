@@ -371,8 +371,15 @@ class ZetalyticsConnector(BaseConnector):
 
             for record in data['results']:
                 domains[record['domain']] = {}
-                domains[record['domain']]['creation_date'] = record['date']
-                domains[record['domain']]['last_seen'] = record['last_seen']
+                try:
+                    domains[record['domain']]['creation_date'] = record['date']
+                except:
+                    pass
+
+                try:
+                    domains[record['domain']]['last_seen'] = record['last_seen']
+                except:
+                    pass
 
         return domains
 
@@ -465,7 +472,7 @@ class ZetalyticsConnector(BaseConnector):
         action_result.add_data(domains)
 
         summary = action_result.update_summary({})
-        summary['count'] = data['metadata']['counts']['matched']
+        summary['count'] = len(domains)
 
         return action_result.set_status(phantom.APP_SUCCESS)
 
@@ -757,7 +764,7 @@ class ZetalyticsConnector(BaseConnector):
         action_result.add_data(response)
 
         summary = action_result.update_summary({})
-        summary['count'] = data['total']
+        summary['count'] = len(domains)
 
         return action_result.set_status(phantom.APP_SUCCESS)
 
@@ -861,8 +868,8 @@ class ZetalyticsConnector(BaseConnector):
         self._state = self.load_state()
 
         config = self.get_config()
-        user_hash = config['ZL_user_hash']
-        self._base_url = 'https://zonecruncher.com/' + user_hash
+        self._user_hash = config['ZL_user_hash']
+        self._base_url = 'https://zonecruncher.com/' + self._user_hash
 
         return phantom.APP_SUCCESS
 
