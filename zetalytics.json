@@ -14,7 +14,7 @@
     "utctime_updated": "2018-04-24T19:45:20.191132Z",
     "package_name": "phantom_zetalytics",
     "main_module": "zetalytics_connector.pyc",
-    "min_phantom_version": "3.5.180",
+    "min_phantom_version": "4.0.1068",
     "app_wizard_version": "1.0.0",
     "configuration": {
         "ZL_user_hash": {
